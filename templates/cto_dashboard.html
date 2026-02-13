@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Custom Dashboard Styles -->
+<div class="container-fluid py-5" style="background-color: #f8f9fa; min-height: 100vh; font-family: 'Segoe UI', Roboto, sans-serif;">
+    <div class="container">
+        
+        <!-- HEADER SECTION -->
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <h1 style="font-weight: 800; color: #1a202c; letter-spacing: -1px; margin-bottom: 0;">COO Oversight</h1>
+                <p class="text-muted mb-0">Hiring Pipeline & Management Control Center</p>
+            </div>
+            <a href="/logout" class="btn btn-outline-danger shadow-sm" style="border-radius: 8px; font-weight: 600; padding: 8px 20px;">
+                Sign Out
+            </a>
+        </div>
+
+        <!-- QUICK STATS ROW -->
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px; border-left: 5px solid #ffc107 !important;">
+                    <div class="card-body">
+                        <h6 class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Pending Approvals</h6>
+                        <h2 class="mb-0" style="font-weight: 700; color: #1a202c;">{{ pending|length }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px; border-left: 5px solid #0d6efd !important;">
+                    <div class="card-body">
+                        <h6 class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Total Hires</h6>
+                        <h2 class="mb-0" style="font-weight: 700; color: #1a202c;">{{ hires|length }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px; border-left: 5px solid #dc3545 !important;">
+                    <div class="card-body">
+                        <h6 class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Total Rejections</h6>
+                        <h2 class="mb-0" style="font-weight: 700; color: #1a202c;">{{ rejections|length }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PENDING APPROVALS SECTION -->
+        <div class="card border-0 shadow-sm mb-5" style="border-radius: 15px; overflow: hidden;">
+            <div class="card-header bg-white py-3 border-0">
+                <h5 class="mb-0" style="font-weight: 700; color: #d97706;">⚡ Manager Authorization Requests</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0" style="background-color: #fff;">
+                    <thead style="background-color: #fffbeb;">
+                        <tr>
+                            <th class="ps-4 border-0 text-muted" style="font-size: 0.85rem;">MANAGER NAME</th>
+                            <th class="border-0 text-muted" style="font-size: 0.85rem;">EMAIL ADDRESS</th>
+                            <th class="border-0 text-muted text-center" style="font-size: 0.85rem;">STATUS</th>
+                            <th class="border-0 text-muted text-end pe-4" style="font-size: 0.85rem;">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in pending %}
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td class="ps-4 fw-bold text-dark">{{ user.username }}</td>
+                            <td class="text-muted">{{ user.email }}</td>
+                            <td class="text-center">
+                                <span class="badge" style="background-color: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 20px; font-weight: 600;">Pending Verification</span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <form method="POST" class="m-0">
+                                    <input type="hidden" name="approve_manager_id" value="{{ user.id }}">
+                                    <button type="submit" class="btn btn-warning btn-sm shadow-sm" style="font-weight: 600; border-radius: 6px; padding: 6px 15px;">Grant Access</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-center text-muted py-5">No managers currently awaiting approval.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- HIRES SECTION -->
+            <div class="col-lg-12 mb-5">
+                <h5 class="mb-3 ps-2" style="font-weight: 700; color: #1e40af;">✓ Confirmed Placements</h5>
+                <div class="card border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead style="background-color: #eff6ff;">
+                                <tr>
+                                    <th class="ps-4 border-0" style="color: #1e40af;">Candidate</th>
+                                    <th class="border-0">Source</th>
+                                    <th class="border-0">Approved By</th>
+                                    <th class="border-0">Role</th>
+                                    <th class="border-0 text-center">ML Match</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for info, m_name in hires %}
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td class="ps-4">
+                                        <div style="font-weight: 600; color: #1a202c;">{{ info.candidate_name }}</div>
+                                    </td>
+                                    <td><span class="text-muted" style="font-size: 0.9rem;">{{ info.platform }}</span></td>
+                                    <td><span class="badge bg-light text-dark border">{{ m_name }}</span></td>
+                                    <td style="font-weight: 500;">{{ info.role_hired_for }}</td>
+                                    <td class="text-center">
+                                        <div class="fw-bold" style="color: #059669;">{{ info.score }}%</div>
+                                        <div class="progress" style="height: 4px; width: 60px; margin: 0 auto;">
+                                            <div class="progress-bar bg-success" style="width: {{ info.score }}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REJECTIONS SECTION -->
+            <div class="col-lg-12">
+                <h5 class="mb-3 ps-2" style="font-weight: 700; color: #991b1b;">✕ Rejection Audit Log</h5>
+                <div class="card border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead style="background-color: #fef2f2;">
+                                <tr>
+                                    <th class="ps-4 border-0" style="color: #991b1b;">Candidate</th>
+                                    <th class="border-0">Source</th>
+                                    <th class="border-0">Rejected By</th>
+                                    <th class="border-0">Target Role</th>
+                                    <th class="border-0 text-center">ML Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for info, m_name in rejections %}
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td class="ps-4 text-muted">{{ info.candidate_name }}</td>
+                                    <td class="text-muted" style="font-size: 0.9rem;">{{ info.platform }}</td>
+                                    <td><span class="badge bg-light text-muted border">{{ m_name }}</span></td>
+                                    <td>{{ info.role_hired_for }}</td>
+                                    <td class="text-center text-muted" style="font-size: 0.9rem;">{{ info.score }}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

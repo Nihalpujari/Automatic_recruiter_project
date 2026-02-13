@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Candidate Portal <a href="/logout" class="btn btn-danger btn-sm float-end">Logout</a></h1>
+<div class="card mt-4 border-success">
+    <div class="card-header bg-success text-white">Shortlisted!</div>
+    <div class="card-body">
+        <h5>Role: {{ info.role_hired_for }}</h5>
+        <p><strong>Manager:</strong> {{ manager.username }} ({{ manager.email }})</p>
+        <p><strong>Reason:</strong> {{ info.reason }}</p>
+    </div>
+</div>
+{% endblock %}

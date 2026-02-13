@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    /* Full Page Background Logic */
+    body {
+        /* This adds the dark neural network background */
+        background: linear-gradient(rgba(10, 10, 25, 0.8), rgba(10, 10, 25, 0.8)), 
+                    url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* Glassmorphism Card Effect */
+    .login-card {
+        background: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+        backdrop-filter: blur(10px); /* Blurs the background behind the card */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 420px;
+        padding: 50px 40px;
+        text-align: center;
+    }
+
+    .brand-section {
+        margin-bottom: 35px;
+    }
+
+    .brand-title {
+        font-weight: 900;
+        font-size: 2.2rem;
+        color: #0f172a;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+    }
+
+    .brand-subtitle {
+        color: #3b82f6; /* Modern Blue */
+        font-weight: 500;
+        letter-spacing: 5px;
+        font-size: 0.8rem;
+        margin-top: -5px;
+    }
+
+    .ai-chip {
+        background: #f1f5f9;
+        color: #64748b;
+        padding: 5px 15px;
+        border-radius: 50px;
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        display: inline-block;
+        border: 1px solid #e2e8f0;
+    }
+
+    .form-group {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #475569;
+        margin-left: 5px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px 18px;
+        border: 2px solid #f1f5f9;
+        background-color: #f8fafc;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        background-color: #fff;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .btn-login {
+        background: #1e293b; /* Dark Navy */
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        font-weight: 700;
+        width: 100%;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-login:hover {
+        background: #334155;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .footer-links {
+        margin-top: 30px;
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    .footer-links a {
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .footer-links a:hover {
+        text-decoration: underline;
+    }
+
+    /* Secret Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .login-card { animation: fadeIn 0.8s ease-out; }
+
+</style>
+
+<div class="login-card">
+    <div class="brand-section">
+        <div class="ai-chip">AI powered</div>
+        <h1 class="brand-title">Hush Hush</h1>
+        <div class="brand-subtitle">RECRUITER</div>
+    </div>
+
+    <form method="POST">
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" placeholder="ABC" required>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-login">Login</button>
+    </form>
+
+    <div class="footer-links">
+        New Manager? <a href="/register">Create account</a>
+    </div>
+</div>
+{% endblock %}
