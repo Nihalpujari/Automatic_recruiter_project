@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(rgba(10, 10, 25, 0.8), rgba(10, 10, 25, 0.8)),
+                    url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .register-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 520px;
+        padding: 50px 45px;
+        text-align: center;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .brand-section { margin-bottom: 22px; }
+
+    .ai-chip {
+        background: #f1f5f9;
+        color: #64748b;
+        padding: 5px 15px;
+        border-radius: 50px;
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        display: inline-block;
+        border: 1px solid #e2e8f0;
+    }
+
+    .brand-title {
+        font-weight: 900;
+        font-size: 1.9rem;
+        color: #0f172a;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+    }
+
+    .brand-subtitle {
+        color: #3b82f6;
+        font-weight: 600;
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+        margin-top: -4px;
+    }
+
+    .form-group {
+        text-align: left;
+        margin-bottom: 18px;
+    }
+
+    .form-label {
+        font-weight: 700;
+        font-size: 0.8rem;
+        color: #475569;
+        margin-left: 5px;
+        margin-bottom: 6px;
+        display: inline-block;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px 18px;
+        border: 2px solid #f1f5f9;
+        background-color: #f8fafc;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .form-control:focus {
+        background-color: #fff;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .btn-register {
+        background: #1e293b;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        font-weight: 800;
+        width: 100%;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-register:hover {
+        background: #334155;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .footer-links {
+        margin-top: 26px;
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    .footer-links a {
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .footer-links a:hover { text-decoration: underline; }
+
+    /* Optional flash message area if you use flash() here */
+    .flash-wrap{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 10px 0 18px 0;
+    }
+    .flash-alert{
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(239, 68, 68, 0.10);
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        color: #b91c1c;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Make it fit on small screens */
+    @media (max-width: 520px) {
+        .register-card { padding: 40px 22px; border-radius: 16px; }
+    }
+</style>
+
+<div class="register-card">
+    <div class="brand-section">
+        <div class="ai-chip">AI powered</div>
+        <h1 class="brand-title">Manager Registration</h1>
+        <div class="brand-subtitle">HUSH HUSH RECRUITER</div>
+    </div>
+
+    {# If you want flash messages to show here too #}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-wrap">
+          <div class="flash-alert">{{ messages[0] }}</div>
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" name="confirm_password" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn-register">Create Account</button>
+    </form>
+
+    <div class="footer-links">
+        Already have an account? <a href="/login">Login here</a>
+    </div>
+</div>
+{% endblock %}
