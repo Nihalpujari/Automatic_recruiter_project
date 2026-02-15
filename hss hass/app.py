@@ -6,16 +6,12 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from models import db, User, CandidateInfo
-from analysis_module import get_top_candidates  # ✅ your pipeline output
-
-# Fix for MySQLdb import issues when using PyMySQL
+from analysis_module import get_top_candidates  
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 
-# =========================
-# CONFIG (use env vars; safer than hardcoding)
-# =========================
+
 app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY", "secret123")
 
 DB_USER = os.getenv("DB_USER", "root")
@@ -38,9 +34,9 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# =========================
+
 # ROUTES
-# =========================
+
 
 @app.route("/")
 @login_required
@@ -154,7 +150,7 @@ def manager_dashboard():
     if request.method == "POST":
         btn_action = request.form.get("btn_action")
         name = request.form.get("name")
-        role = request.form.get("role")          # ✅ job_role from your pipeline/UI
+        role = request.form.get("role")          
         platform = request.form.get("platform")
         reason = request.form.get("reason")
 
@@ -225,6 +221,12 @@ def manager_dashboard():
 def candidate_dashboard():
     if current_user.role != "candidate":
         return "Access Denied", 403
+    # Must exist AND must be hired
+    info = CandidateInfo.query.filter_by(user_id=current_user.id).first()
+
+    if not info or info.status != "hired":
+        flash("Access denied. Your profile is not marked as HIRED yet.")
+        return redirect(url_for("login"))
 
     info = CandidateInfo.query.filter_by(user_id=current_user.id).first()
     manager = User.query.get(info.manager_id) if info else None
@@ -238,9 +240,8 @@ def logout():
     return redirect(url_for("login"))
 
 
-# =========================
 # INITIAL SETUP
-# =========================
+
 with app.app_context():
     db.create_all()
 
