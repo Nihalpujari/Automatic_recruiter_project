@@ -1,4 +1,4 @@
-=
+
 -- Create Database
 
 CREATE DATABASE IF NOT EXISTS recruitment_db
@@ -50,4 +50,5 @@ CREATE TABLE IF NOT EXISTS candidate_info (
     FOREIGN KEY (manager_id) REFERENCES user (id)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
