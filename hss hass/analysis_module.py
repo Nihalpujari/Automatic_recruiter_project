@@ -9,10 +9,6 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 
 
-# ==========================================================
-# Utility Functions
-# ==========================================================
-
 def percentile_normalize(df, feature_cols):
     """Convert raw metrics into percentile ranks (0-1 scale)."""
     df_norm = df.copy()
@@ -38,10 +34,6 @@ def _kmeans_fit(X, k, seed):
     return labels, km.cluster_centers_, sil
 
 
-# ==========================================================
-# Core Pipeline (KMeans + RF + LR) — No scores returned
-# ==========================================================
-
 def run_kmeans_rf_lr_autoweight_no_scores(
     df,
     name_col,
@@ -52,24 +44,21 @@ def run_kmeans_rf_lr_autoweight_no_scores(
 ):
     """
     Returns list of dicts:
-      {platform, name, role, tier, reason}
+      {platform, name, role, tier}
     No numeric scores are returned.
     """
 
     if df.empty or len(df) < 15:
         return []
 
-    # 1) Keep only needed cols
     df0 = df[[name_col] + feature_cols].copy()
 
-    # 2) Percentile normalize (fairer across scales)
     df0 = percentile_normalize(df0, feature_cols)
 
     # 3) Scale
     X = df0[feature_cols].values
     Xs = StandardScaler().fit_transform(X)
 
-    # 4) Tiering: KMeans(2) choose best of 5 runs by silhouette
     sil_scores = []
     tier_runs = []
     for s in range(5):
@@ -82,7 +71,6 @@ def run_kmeans_rf_lr_autoweight_no_scores(
     sil2 = sil_scores[best_idx]
     df0["tier"] = tier_labels
 
-    # choose larger tier for stability
     unique, counts = np.unique(tier_labels, return_counts=True)
     pick_tier = int(unique[np.argmax(counts)])
 
@@ -93,7 +81,6 @@ def run_kmeans_rf_lr_autoweight_no_scores(
     if len(df_t) < 12:
         return []
 
-    # 5) Profiles: KMeans(3) choose best of 5 runs by silhouette
     sil_scores3 = []
     prof_runs = []
     centers_runs = []
@@ -110,22 +97,19 @@ def run_kmeans_rf_lr_autoweight_no_scores(
 
     df_t["profile_id"] = prof_labels
 
-    # 6) Independent target: mean of percentile features
     df_t["pct_composite"] = df_t[feature_cols].mean(axis=1)
 
-    # 7) RF regressor predicts composite (independent signal)
     rf = RandomForestRegressor(n_estimators=400, random_state=seed)
     rf.fit(X_t, df_t["pct_composite"])
     rf_pred = rf.predict(X_t)
 
-    # 8) LR fit score: closer to centroid = better fit
     dists = np.linalg.norm(X_t - prof_centers[prof_labels], axis=1)
     y_fit = -dists
     lr_fit = LinearRegression()
     lr_fit.fit(X_t, y_fit)
     lr_pred = _safe_minmax(lr_fit.predict(X_t))
 
-    # 9) Auto-weight RF + LR (learn weights, no manual 0.6/0.4)
+    
     Z = np.column_stack([rf_pred, lr_pred])
     target = df_t["pct_composite"].values
 
@@ -135,7 +119,7 @@ def run_kmeans_rf_lr_autoweight_no_scores(
 
     df_t["final_score"] = final_score
 
-    # 10) Role mapping: cluster mean(final_score) low→high
+    
     cluster_strength = (
         df_t.groupby("profile_id")["final_score"]
         .mean()
@@ -150,7 +134,7 @@ def run_kmeans_rf_lr_autoweight_no_scores(
     }
     df_t["job_role"] = df_t["profile_id"].map(role_map)
 
-    # 11) Pick top_n per role (internally by final_score, but not returned)
+    
     role_order = ["Developer", "Senior Developer", "Solution Architect"]
     results = []
 
@@ -177,9 +161,7 @@ def run_kmeans_rf_lr_autoweight_no_scores(
     return results
 
 
-# ==========================================================
-# Flask-facing function
-# ==========================================================
+
 
 def get_top_candidates():
     """
@@ -192,7 +174,7 @@ def get_top_candidates():
 
     final_output = {"GitHub": [], "StackOverflow": [], "Kaggle": []}
 
-    # -------- GitHub --------
+    #  GitHub 
     if os.path.exists("github_candidates_1.csv"):
         df = pd.read_csv("github_candidates_1.csv")
         gh = (
@@ -211,7 +193,7 @@ def get_top_candidates():
             platform_name="GitHub"
         )
 
-    # -------- StackOverflow --------
+    # StackOverflow 
     if os.path.exists("stackoverflow_200.csv"):
         df = pd.read_csv("stackoverflow_200.csv").fillna(0)
         df["tags"] = df["top_tags"].apply(lambda x: len(str(x).split(",")))
@@ -224,7 +206,7 @@ def get_top_candidates():
             platform_name="StackOverflow"
         )
 
-    # -------- Kaggle --------
+    #  Kaggle 
     if os.path.exists("kaggle-preprocessed.csv"):
         df = pd.read_csv("kaggle-preprocessed.csv", index_col=0)
         kg = (
