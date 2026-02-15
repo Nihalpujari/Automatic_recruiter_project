@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div style="
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+
+    background: linear-gradient(rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.92)),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #e2e8f0;
+">
+
+    <!-- CENTER CONTENT -->
+    <div style="
+        max-width: 900px;
+        margin: 0 auto;
+    ">
+
+        <!-- HEADER CARD -->
+        <div style="
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 16px;
+            padding: 22px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+        ">
+            <div>
+                <div style="
+                    font-size: 12px;
+                    letter-spacing: 2px;
+                    font-weight: 800;
+                    color: #93c5fd;
+                    text-transform: uppercase;
+                    margin-bottom: 6px;
+                ">Candidate Portal</div>
+
+                <div style="
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: #ffffff;
+                ">
+                    Welcome, {{ current_user.username }}
+                </div>
+            </div>
+
+            <a href="/logout" style="
+                text-decoration: none;
+                padding: 10px 16px;
+                border-radius: 10px;
+                font-weight: 800;
+                font-size: 12px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                background: rgba(239, 68, 68, 0.12);
+                border: 1px solid rgba(239, 68, 68, 0.35);
+                color: #fecaca;
+            ">Logout</a>
+        </div>
+
+        <!-- MAIN CARD -->
+        <div style="
+            margin-top: 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: 18px;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+        ">
+
+            <!-- CARD HEADER -->
+            <div style="
+                padding: 14px 20px;
+                background: rgba(16, 185, 129, 0.12);
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 900;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                font-size: 12px;
+                color: #bbf7d0;
+            ">
+                <span style="
+                    width: 9px;
+                    height: 9px;
+                    border-radius: 999px;
+                    background: #10b981;
+                    display: inline-block;
+                "></span>
+                Shortlisted
+            </div>
+
+            <!-- CARD BODY -->
+            <div style="padding: 20px;">
+
+                <!-- ROLE -->
+                <div style="
+                    background: rgba(15, 23, 42, 0.65);
+                    border: 1px solid rgba(255,255,255,0.08);
+                    border-radius: 14px;
+                    padding: 14px 16px;
+                    margin-bottom: 12px;
+                ">
+                    <div style="
+                        font-size: 11px;
+                        letter-spacing: 1.5px;
+                        font-weight: 800;
+                        color: #94a3b8;
+                        text-transform: uppercase;
+                        margin-bottom: 6px;
+                    ">Role</div>
+                    <div style="font-size: 16px; font-weight: 800; color: #fff;">
+                        {{ info.role_hired_for }}
+                    </div>
+                </div>
+
+                <!-- MANAGER -->
+                <div style="
+                    background: rgba(15, 23, 42, 0.65);
+                    border: 1px solid rgba(255,255,255,0.08);
+                    border-radius: 14px;
+                    padding: 14px 16px;
+                    margin-bottom: 12px;
+                ">
+                    <div style="
+                        font-size: 11px;
+                        letter-spacing: 1.5px;
+                        font-weight: 800;
+                        color: #94a3b8;
+                        text-transform: uppercase;
+                        margin-bottom: 6px;
+                    ">Manager</div>
+                    <div style="font-size: 14px; font-weight: 700; color: #e2e8f0;">
+                        {{ manager.username }} <span style="color:#93c5fd;">({{ manager.email }})</span>
+                    </div>
+                </div>
+
+                <!-- NEXT STEP -->
+                <div style="
+                    background: rgba(59, 130, 246, 0.10);
+                    border: 1px solid rgba(59, 130, 246, 0.28);
+                    border-radius: 14px;
+                    padding: 14px 16px;
+                ">
+                    <div style="
+                        font-size: 11px;
+                        letter-spacing: 1.5px;
+                        font-weight: 900;
+                        color: #93c5fd;
+                        text-transform: uppercase;
+                        margin-bottom: 6px;
+                    ">Next Step</div>
+                    <div style="font-size: 13px; line-height: 1.55; color: #e2e8f0;">
+                        The final stage of the hiring process will be a coding assessment. The examination link will be published here on the Candidate Portal once it becomes available.
+                    </div>
+                </div>
+
+                <div style="
+                    margin-top: 12px;
+                    font-size: 12px;
+                    color: rgba(226, 232, 240, 0.65);
+                ">
+                    If anything looks incorrect, please contact your manager.
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
