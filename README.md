@@ -74,10 +74,6 @@ K-Means Clustering (2 stages)
 Candidate Scoring
 (Random Forest + Linear Regression)
 ↓
-Final Score
-↓
-Role Assignment
-↓
 Hiring Manager Dashboard
 
 
@@ -88,7 +84,7 @@ Hiring Manager Dashboard
 The system uses a **two-stage K-Means process**:
 
 ### 1. Tiering (k = 2)
-- Separates weak and strong candidates
+- Separates Teir-1 and teir-2 candidates
 
 ### 2. Role Profiling (k = 3)
 Clusters strong candidates into:
