@@ -62,19 +62,26 @@ The goal is to build an **automated, data-driven candidate selection system** us
 ## System Pipeline
 
 Data Sources (GitHub, SO, Kaggle)
+
 ↓
 Feature Extraction
+
 ↓
 Percentile Normalization
+
 ↓
 Feature Scaling
+
 ↓
 K-Means Clustering (2 stages)
+
 ↓
 Candidate Scoring
 (Random Forest + Linear Regression)
+
 ↓
 Hiring Manager Dashboard
+
 
 
 ---
