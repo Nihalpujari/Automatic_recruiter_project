@@ -55,7 +55,7 @@ def run_kmeans_rf_lr_autoweight_no_scores(
 
     df0 = percentile_normalize(df0, feature_cols)
 
-    # 3) Scale
+    # Scale
     X = df0[feature_cols].values
     Xs = StandardScaler().fit_transform(X)
 
@@ -227,3 +227,4 @@ def get_top_candidates():
         )
 
     return final_output
+
